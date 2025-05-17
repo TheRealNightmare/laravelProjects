@@ -3,7 +3,7 @@
  
 <head>
   <title>Laravel 10 Task List App</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
   <script src="//unpkg.com/alpinejs" defer></script>
 
   {{-- blade-formatter-disable --}}

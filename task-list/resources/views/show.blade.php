@@ -1,38 +1,45 @@
-<!-- resources/views/show.blade.php -->
+@extends('layouts.app')
 
-<h1>Task Details</h1>
+@section('title', $task->title)
 
-<p><strong>Title:</strong> {{ $task->title }}</p>
-<p><strong>Description:</strong> {{ $task->description }}</p>
+@section('content')
+  <div class="mb-4">
+    <a href="{{ route('tasks.index') }}" class="link">← Go back to the task list!</a>
+  </div>
 
-@if($task->long_description)
-    <p><strong>Long Description:</strong> {{ $task->long_description }}</p>
-@endif
+  <p class="mb-4 text-slate-700">{{ $task->description }}</p>
 
-<p><strong>Completed:</strong> {{ $task->completed ? 'Yes' : 'No' }}</p>
-<p><strong>Created at:</strong> {{ $task->created_at }}</p>
-<p><strong>Updated at:</strong> {{ $task->updated_at }}</p>
+  @if ($task->long_description)
+    <p class="mb-4 text-slate-700">{{ $task->long_description }}</p>
+  @endif
 
-<div>
-    <a href={{ route('tasks.edit',['task'=>$task->id ]) }}>Edit</a>
-</div>
+  <p class="mb-4 text-sm text-slate-500">Created {{ $task->created_at->diffForHumans() }} • Updated
+    {{ $task->updated_at->diffForHumans() }}</p>
 
-<div>
-    <form method="POST" action="{{  route('tasks.toggle-complete',['task'=>$task]) }}">
-        @csrf
-        @method('PUT')
-        <button type="submit">
-            Mark as {{ $task->completed ? 'not completed' : 'completed' }}
-        </button>
+  <p class="mb-4">
+    @if ($task->completed)
+      <span class="font-medium text-green-500">Completed</span>
+    @else
+      <span class="font-medium text-red-500">Not completed</span>
+    @endif
+  </p>
+
+  <div class="flex gap-2">
+    <a href="{{ route('tasks.edit', ['task' => $task]) }}"
+      class="btn">Edit</a>
+
+    <form method="POST" action="{{ route('tasks.toggle-complete', ['task' => $task]) }}">
+      @csrf
+      @method('PUT')
+      <button type="submit" class="btn">
+        Mark as {{ $task->completed ? 'not completed' : 'completed' }}
+      </button>
     </form>
-</div>
 
-<div>
-    <form method="POST" action="{{ route('tasks.destroy',['task'=>$task->id]) }}">
-        @csrf
-        @method('DELETE')
-        <button type="submit" >Delete Task</button>
+    <form action="{{ route('tasks.destroy', ['task' => $task]) }}" method="POST">
+      @csrf
+      @method('DELETE')
+      <button type="submit" class="btn">Delete</button>
     </form>
-</div>
-
-<a href="{{ route('tasks.index') }}">← Back to Task List</a>
+  </div>
+@endsection
